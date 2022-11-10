@@ -10,7 +10,7 @@ function App() {
         <h1>Banking App Frontend - Dev Page</h1>
         <div>
           <ul>
-            <li><button onClick={getAccounts}>Get All Accounts</button></li>
+              <li><button onClick={getAccounts}>Get All Accounts</button></li>
           </ul>
         </div>
       <div>
@@ -74,13 +74,21 @@ function getAccounts() {
 
 function updateAccount(account_id: string) {
     console.log("Updating account " + account_id);
-    axios.put(backendUrl + "account/")
-        .then(res => {
-            console.log(res);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+    axios.put(backendUrl + "account/", {
+        // Get the account details from the form
+        _id: (document.getElementById("_id") as HTMLInputElement).value,
+        account_id: account_id,
+        name: (document.getElementById("name") as HTMLInputElement).value,
+        surname: (document.getElementById("surname") as HTMLInputElement).value,
+        email: (document.getElementById("email") as HTMLInputElement).value,
+        password: (document.getElementById("password") as HTMLInputElement).value,
+        transactions: (document.getElementById("transactions") as HTMLInputElement).value,
+        fiat_accounts: (document.getElementById("fiat_accounts") as HTMLInputElement).value,
+        crypto_accounts: (document.getElementById("crypto_accounts") as HTMLInputElement).value,
+        __v: (document.getElementById("__v") as HTMLInputElement).value
+    })
+        .then(res => {console.log(res);})
+        .catch(err => {console.log(err);});
 }
 
 function deleteAccount(account_id: string) {
@@ -156,6 +164,7 @@ async function updateAccountPage(account_id: string) {
         item.innerHTML = key + ": ";
         const field = document.createElement("input");
         field.type = "text";
+        field.id = key;
         if (typeof value === "string") {
             field.value = value;
         }
