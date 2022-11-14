@@ -1,0 +1,31 @@
+.dashboard {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: black 1px solid;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.dashboard__accounts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard__accounts__fiat {
+    width: 100%;
+    border: black 1px solid;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 5px;
+}
+
+.dashboard__accounts__crypto {
+    width: 100%;
+    border: black 1px solid;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 5px;
+}
