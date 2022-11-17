@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import useToken from './hooks/useToken';
 import './App.css';
+import CreateAccount from "./components/createAccount";
 
 function App() {
 
@@ -15,6 +16,8 @@ function App() {
         console.log("App.tsx: token: ", token);
         // Redirect to login page
         window.history.pushState({}, "", "/login");
+        // refresh page
+        window.location.reload();
     }
 
     return (
@@ -25,6 +28,7 @@ function App() {
                     <Route path="/dashboard" element={[<Navbar key={"1"}/>,<Dashboard key={"2"}/>]} />
                     <Route path="/login" element={[<Navbar key={"1"}/>,<Login key={"2"} setToken={saveToken} />]} />
                     <Route path="/logout" element={[<Navbar key={"1"}/>,<Home key={"2"}/>]} />
+                    <Route path="/createAccount" element={[<Navbar key={"1"}/>,<CreateAccount key={"2"} token={token}/>]} />
                 </Routes>
             </BrowserRouter>
         </div>

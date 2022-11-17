@@ -2,6 +2,12 @@ import React from 'react';
 import axios from "axios";
 import {backendUrl} from "../../backendConfig";
 import "./Dashboard.css";
+import {text} from "stream/consumers";
+
+function CreateNewAccount() {
+    // Redirect to creation page
+    window.history.pushState({}, "", "/createAccount");
+}
 
 export default function Dashboard() {
     // Let's define the state for the dashboard
@@ -31,8 +37,14 @@ export default function Dashboard() {
 
     // useEffect hook to get the dashboard data
     React.useEffect(() => {
-        getDashboard().then();
+        //getDashboard().then();
     });
+
+    try {
+        getDashboard().then();
+    }catch (e) {
+        console.log("Dashboard.tsx: error: ", e);
+    }
 
     return(
         <div className="dashboard">
@@ -41,7 +53,10 @@ export default function Dashboard() {
             <p>Here you can see your accounts and transactions.</p>
             <div className="dashboard__accounts">
                 <div className="dashboard__accounts__fiat">
-                    <h4>Fiat accounts</h4>
+                    <h4 className="header">
+                        Fiat accounts
+                        <button className="create" onClick={CreateNewAccount}>New Account</button>
+                    </h4>
                     <ul>
                         {dashboard.fiat_accounts.map((account, index) => {
                             return <li key={index}>{account}</li>
@@ -49,10 +64,14 @@ export default function Dashboard() {
                     </ul>
                 </div>
                 <div className="dashboard__accounts__crypto">
-                    <h4>Crypto accounts</h4>
+                    <h4 className="header">
+                        Crypto accounts
+                        <button className="create" onClick={CreateNewAccount}>New Account</button>
+                    </h4>
                     <ul>
                         {dashboard.crypto_accounts.map((account, index) => {
-                            return <li key={index}>{account}</li>
+                            // @ts-ignore
+                            return <li key={index}>ID: {account}</li>
                         })}
                     </ul>
                 </div>
