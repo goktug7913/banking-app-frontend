@@ -1,5 +1,6 @@
-// Type for userAccount slice
-export interface UserAccountState {
+import React, {createContext} from "react";
+
+export interface UserAccountInterface {
     account_id: string;
     name: string;
     surname: string;
@@ -8,3 +9,5 @@ export interface UserAccountState {
     crypto_accounts: string[];
     transactions: string[];
 }
+
+export const UserCtx = createContext<UserAccountInterface | null>(null);

@@ -1,12 +1,19 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {useContext} from "react";
+import {Route, Routes } from 'react-router-dom';
+
+import useToken from './hooks/useToken';
+import CreateAccount from "./components/createAccount";
+
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
-import useToken from './hooks/useToken';
-import './App.css';
-import CreateAccount from "./components/createAccount";
+
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import {UserCtx} from "./context/UserState";
+
 
 function App() {
 
@@ -15,13 +22,23 @@ function App() {
     if(!token) {
         console.log("App.tsx: token: ", token);
         // Redirect to login page
-        window.history.pushState({}, "", "/login");
+        //window.history.pushState({}, "", "/login");
         // refresh page
-        window.location.reload();
+        //window.location.reload();
     }
 
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
+
+    const UserContext = useContext(UserCtx);
+
     return (
-        <div className="wrapper">
+        <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+            <UserContext.Provider value={{token, saveToken}}>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={[<Navbar key={"1"}/>,<Home key={"2"}/>]} />
@@ -31,7 +48,8 @@ function App() {
                     <Route path="/createAccount" element={[<Navbar key={"1"}/>,<CreateAccount key={"2"} token={token}/>]} />
                 </Routes>
             </BrowserRouter>
-        </div>
+            </UserContext.Provider>
+        </ThemeProvider>
     );
 }
 
