@@ -31,9 +31,9 @@ export default function Navbar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link href="/" color="inherit" underline="none">Banking App</Link>
                     </Typography>
-                    {UserContext.user.account_id ? <Button color="inherit" href="/dashboard">Dashboard</Button> : null}
-                    {UserContext.user.account_id ? null : <Button color="inherit" href="/login">Login</Button>}
-                    {UserContext.user.account_id ? <Button color="inherit" href="/logout">Logout</Button> : null}
+                    {UserContext.user.account_id ? <Button color="primary" href="/dashboard">Dashboard</Button> : null}
+                    {UserContext.user.account_id ? null : <Button color="primary" href="/login">Login</Button>}
+                    {UserContext.user.account_id ? <Button color="primary" href="/logout">Logout</Button> : <Button color="primary" href="/register">Register</Button>}
                 </Toolbar>
             </Container>
         </AppBar>

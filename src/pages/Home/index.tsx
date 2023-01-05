@@ -6,7 +6,7 @@ export default function Home() {
 
     return (
         <Container>
-            <Stack spacing={8} sx={{ my: 4 }}>
+            <Stack spacing={6} sx={{ my: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     World leading banking and investment services.
                 </Typography>

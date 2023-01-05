@@ -3,7 +3,18 @@ import axios from "axios";
 import {backendUrl} from "../../backendConfig";
 import PropTypes from 'prop-types';
 import './Login.css';
-import {Box, Button, Checkbox, Container, FormControlLabel, FormLabel, TextField} from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    Container,
+    Fade,
+    FormControlLabel,
+    FormLabel, Link,
+    Stack,
+    TextField
+} from "@mui/material";
 
 interface user {
     account_id: string,
@@ -39,7 +50,14 @@ export default function Login({ setToken }) {
                 <TextField margin="normal" required fullWidth label="Password" type="password" onChange={e => setUser({...user, password: e.target.value})}/>
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>Submit</Button>
-                <FormLabel>No account yet?</FormLabel> <a href="/register">Register</a>
+                <FormLabel>No account yet? <Link href="/register">Register</Link></FormLabel>
+                <Fade in={true} style={{transitionDuration: "500ms"}}>
+                    <Alert severity="info">
+                        You can use the testing account <br/>
+                        Username: test <br/>
+                        Password: test
+                    </Alert>
+                </Fade>
             </Box>
         </Container>
     )
