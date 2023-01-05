@@ -3,6 +3,7 @@ import axios from "axios";
 import {backendUrl} from "../../backendConfig";
 import PropTypes from 'prop-types';
 import './Login.css';
+import {Box, Button, Checkbox, Container, FormControlLabel, FormLabel, TextField} from "@mui/material";
 
 interface user {
     account_id: string,
@@ -17,7 +18,7 @@ Login.propTypes = {
 export default function Login({ setToken }) {
     const [user, setUser] = useState<user>({account_id: "", password: ""});
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log("Login.tsx: handleSubmit: user: ", user);
         loginUser(user).then(data => {
@@ -31,22 +32,16 @@ export default function Login({ setToken }) {
     console.log(user);
 
     return(
-        <div className="login-wrapper">
+        <Container>
             <h1>Please Log In</h1>
-            <form onSubmit={onSubmit}>
-                <label>
-                    <p>Username</p>
-                    <input type="text" onChange={e => setUser({...user, account_id: e.target.value})}/>
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input type="password" onChange={e => setUser({...user, password: e.target.value})}/>
-                </label>
-                <div>
-                    <input type="submit" value="Submit" />
-                </div>
-            </form>
-        </div>
+            <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+                <TextField margin="normal" required fullWidth autoFocus label="Username" type="text" onChange={e => setUser({...user, account_id: e.target.value})}/>
+                <TextField margin="normal" required fullWidth label="Password" type="password" onChange={e => setUser({...user, password: e.target.value})}/>
+                <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>Submit</Button>
+                <FormLabel>No account yet?</FormLabel> <a href="/register">Register</a>
+            </Box>
+        </Container>
     )
 }
 

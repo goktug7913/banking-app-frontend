@@ -1,6 +1,6 @@
 import React, {createContext} from "react";
 
-export interface UserAccountInterface {
+interface UserAccountInterface {
     account_id: string;
     name: string;
     surname: string;
@@ -10,4 +10,43 @@ export interface UserAccountInterface {
     transactions: string[];
 }
 
-export const UserCtx = createContext<UserAccountInterface | null>(null);
+interface ContextProps {
+    user: UserAccountInterface;
+    setUser: React.Dispatch<React.SetStateAction<UserAccountInterface>>;
+}
+
+export const UserCtx = createContext<ContextProps>({
+    user: {
+        account_id: '',
+        name: '',
+        surname: '',
+        email: '',
+        fiat_accounts: [],
+        crypto_accounts: [],
+        transactions: [],
+    },
+    setUser: () => {},
+});
+
+// For Child Components
+type Props = {
+    children?: React.ReactNode
+};
+
+export const UserProvider: React.FC<Props> = ({children}) => {
+    const [user, setUser] = React.useState<UserAccountInterface>({
+        account_id: '',
+        name: '',
+        surname: '',
+        email: '',
+        fiat_accounts: [],
+        crypto_accounts: [],
+        transactions: [],
+    });
+
+    return (
+        <UserCtx.Provider value={{user, setUser}}>
+            {children}
+        </UserCtx.Provider>
+    );
+};

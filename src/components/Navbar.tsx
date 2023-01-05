@@ -1,7 +1,9 @@
 import React from "react";
+import {useContext} from "react";
 import "./Navbar.css";
 import AppBar from '@mui/material/AppBar';
 import {Button, Container, Link, Toolbar, Typography} from "@mui/material";
+import {UserCtx} from "../context/UserState";
 
 // Horizontal navigation bar
 // Login and logout buttons, and a link to the home page
@@ -10,6 +12,18 @@ import {Button, Container, Link, Toolbar, Typography} from "@mui/material";
 // Logout button is only visible when logged in
 
 export default function Navbar() {
+    const [user, setUser] = React.useState({
+        account_id: '',
+        name: '',
+        surname: '',
+        email: '',
+        fiat_accounts: [],
+        crypto_accounts: [],
+        transactions: [],
+    });
+
+    const UserContext = useContext(UserCtx);
+
     return(
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -17,9 +31,9 @@ export default function Navbar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link href="/" color="inherit" underline="none">Banking App</Link>
                     </Typography>
-                    <Button color="inherit" href="/dashboard">Dashboard</Button>
-                    <Button color="inherit" href="/login">Login</Button>
-                    <Button color="inherit" href="/logout">Logout</Button>
+                    {UserContext.user.account_id ? <Button color="inherit" href="/dashboard">Dashboard</Button> : null}
+                    {UserContext.user.account_id ? null : <Button color="inherit" href="/login">Login</Button>}
+                    {UserContext.user.account_id ? <Button color="inherit" href="/logout">Logout</Button> : null}
                 </Toolbar>
             </Container>
         </AppBar>
