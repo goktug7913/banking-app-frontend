@@ -1,6 +1,7 @@
 import useToken from "../hooks/useToken";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import axiosInstance from "../api/AxiosInstance";
 import {Alert, Box, Button, Checkbox, Container, FormControlLabel, Select, TextField} from "@mui/material";
 export const RegisterForm = () => {
     const [name, setName] = useState("");
@@ -17,26 +18,19 @@ export const RegisterForm = () => {
         if (password !== password2) {
             setError("Passwords do not match");
         }
-        // Check ToS checkbox
         else {
-            const response = await fetch('http://localhost:8080/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name,
-                    surname,
-                    email,
-                    password,
-                }),
-            });
-            const content = await response.json();
-            if (content.error) {
-                setError(content.error);
-            } else {
-                saveToken(content.token);
+            try {
+                const response = await axiosInstance.post("/register", {
+                    name: name,
+                    surname: surname,
+                    email: email,
+                    password: password
+                });
+                console.log(response.data);
+                saveToken(response.data.token);
                 navigate("/dashboard");
+            } catch (e) {
+                setError("An error occurred");
             }
         }
     };
