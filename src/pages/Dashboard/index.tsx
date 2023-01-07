@@ -2,6 +2,8 @@ import React from 'react';
 import axios from "axios";
 import {backendUrl} from "../../backendConfig";
 //import "./Dashboard.css";
+//@ts-ignore
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import {
     Button,
     Container,
@@ -12,9 +14,9 @@ import {
     Divider,
     Box,
     ListItemText,
-    ListItemIcon
+    ListItemIcon,
 } from "@mui/material";
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+
 
 function CreateNewAccount() {
     // Redirect to creation page
@@ -77,8 +79,14 @@ export default function Dashboard() {
                         </Stack>
 
                         <List>
+                            {dashboard && !dashboard.fiat_accounts.length && <Typography variant="body1">No fiat accounts yet.</Typography>}
                             {dashboard.fiat_accounts.map((account, index) => {
-                                return <li key={index}>{account}</li>
+                                return(
+                                    <ListItem key={index} alignItems="center">
+                                        <ListItemIcon children={<AccountBalanceWalletIcon/>}/>
+                                        <ListItemText primary={"ID: " + account}  />
+                                    </ListItem>
+                                )
                             })}
                         </List>
                     </Stack>
@@ -92,12 +100,14 @@ export default function Dashboard() {
                         </Stack>
 
                         <List>
+                            {dashboard && !dashboard.crypto_accounts.length && <Typography variant="body1">No crypto accounts yet.</Typography>}
                             {dashboard.crypto_accounts.map((account, index) => {
-                                // @ts-ignore
-                                return <ListItem key={index} alignItems="flex-start">
+                                return(
+                                <ListItem key={index} alignItems="center">
+                                    <ListItemIcon children={<AccountBalanceWalletIcon/>}/>
                                     <ListItemText primary={"ID: " + account}  />
-                                    <ListItemIcon/>
                                 </ListItem>
+                                )
                             })}
                         </List>
                     </Stack>
