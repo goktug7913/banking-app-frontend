@@ -1,8 +1,6 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import axios from "axios";
 import {backendUrl} from "../../backendConfig";
-import PropTypes from 'prop-types';
-import './Login.css';
 import {
     Alert,
     Box,
@@ -12,35 +10,54 @@ import {
     Fade,
     FormControlLabel,
     FormLabel, Link,
-    Stack,
     TextField
 } from "@mui/material";
+import {UserCtx} from "../../context/UserState";
 
 interface user {
     account_id: string,
     password: string
 }
 
-Login.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
 // @ts-ignore
-export default function Login({ setToken }) {
+export default function Login() {
     const [user, setUser] = useState<user>({account_id: "", password: ""});
+    const [error, setError] = useState("");
+
+    const UserContext = useContext(UserCtx);
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Login.tsx: handleSubmit: user: ", user);
+
+        // Let's clear the error message if there is one
+        setError("");
+
         loginUser(user).then(data => {
             console.log("Login.tsx: handleSubmit: data: ", data);
-            setToken(data);
+            // Set context
+            UserContext.setUser(data);
             // Redirect to dashboard page
             window.history.pushState({}, "", "/dashboard");
+            const navEvent = new PopStateEvent('popstate');
+            window.dispatchEvent(navEvent);
+        }).catch(err => {
+            console.log("Login.tsx: handleSubmit: err: ", err);
+            setError(err);
         });
     }
 
-    console.log(user);
+    function loginUser(credentials: any) {
+        console.log("Login.tsx: loginUser: request: ", credentials);
+        const url = backendUrl + "/login";
+        return axios.post(url, credentials)
+            .then(res => {
+                return res.data;
+            })
+            .catch(err => {
+                console.log(err);
+                setError(err.response.data);
+            });
+    }
 
     return(
         <Container>
@@ -51,6 +68,11 @@ export default function Login({ setToken }) {
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>Submit</Button>
                 <FormLabel>No account yet? <Link href="/register">Register</Link></FormLabel>
+
+                <Fade in={error !== ""} style={{transitionDuration: "500ms"}}>
+                    <Alert severity="error">{error}</Alert>
+                </Fade>
+
                 <Fade in={true} style={{transitionDuration: "500ms"}}>
                     <Alert severity="info">
                         You can use the testing account <br/>
@@ -61,17 +83,4 @@ export default function Login({ setToken }) {
             </Box>
         </Container>
     )
-}
-
-function loginUser(credentials: any) {
-    console.log("Login.tsx: loginUser: request: ", credentials);
-    const url = backendUrl + "/login";
-    console.log("Login.tsx: loginUser: url: ", url);
-    return axios.post(url, credentials)
-        .then(res => {
-            return res.data;
-        })
-        .catch(err => {
-            console.log(err);
-        })
 }

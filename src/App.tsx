@@ -51,9 +51,9 @@ function App() {
                     <Routes>
                         <Route path="/" element={[<Navbar key={"1"}/>,<Home key={"2"}/>]} />
                         <Route path="/dashboard" element={[<Navbar key={"1"}/>,<Dashboard key={"2"}/>]} />
-                        <Route path="/login" element={[<Navbar key={"1"}/>,<Login key={"2"} setToken={saveToken} />]} />
-                        <Route path="/logout" element={[<Navbar key={"1"}/>,<Home key={"2"}/>]} />
-                        <Route path="/register" element={[<Navbar key={"1"}/>,<Register key={"2"}/>]} />
+                        <Route path="/login" element={[<Navbar key={"1"}/>,<Login key={"2"} />]} />
+                        <Route path="/logout" element={[<Navbar key={"1"}/>,<Home key={"2"} />]} />
+                        <Route path="/register" element={[<Navbar key={"1"}/>,<Register key={"2"} />]} />
                         <Route path="/createAccount" element={[<Navbar key={"1"}/>,<CreateAccount key={"2"} token={token}/>]} />
                     </Routes>
                 </BrowserRouter>

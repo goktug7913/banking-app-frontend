@@ -1,6 +1,8 @@
-import React, {createContext} from "react";
+import React, {createContext, useEffect} from "react";
+import axiosInstance from "../api/AxiosInstance";
 
 interface UserAccountInterface {
+    token: string;
     account_id: string;
     name: string;
     surname: string;
@@ -17,6 +19,7 @@ interface ContextProps {
 
 export const UserCtx = createContext<ContextProps>({
     user: {
+        token: "",
         account_id: '',
         name: '',
         surname: '',
@@ -35,6 +38,7 @@ type Props = {
 
 export const UserProvider: React.FC<Props> = ({children}) => {
     const [user, setUser] = React.useState<UserAccountInterface>({
+        token: "",
         account_id: '',
         name: '',
         surname: '',
@@ -44,9 +48,40 @@ export const UserProvider: React.FC<Props> = ({children}) => {
         transactions: [],
     });
 
+    // Check if the user is already logged in, and if so, validate the token
+    useEffect(() => {
+        if (!(sessionStorage.getItem('user'))) {
+            console.log("No user found in session storage");
+            return;
+        }
+
+        setUser(JSON.parse(sessionStorage.getItem('user') as string) as UserAccountInterface);
+
+        axiosInstance.post("/api/validate")
+            .then((result) => {
+                    if (result.status === 200) {
+                        // Token is valid, set the user's next spin time
+                    }
+                }
+            ).catch((err: any) => {
+            console.log(err);
+            // Token is invalid, let's log the user out
+            sessionStorage.removeItem('user');
+            setUser(null as unknown as UserAccountInterface);
+        });
+    }, []);
+
+    // Update the session storage when the user changes
+    useEffect(() => {
+        if(user.account_id && user.token) {
+            sessionStorage.setItem('user', JSON.stringify(user));
+        }
+    }, [user]);
+
     return (
         <UserCtx.Provider value={{user, setUser}}>
             {children}
         </UserCtx.Provider>
     );
 };
+
