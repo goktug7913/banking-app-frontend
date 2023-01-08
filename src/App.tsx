@@ -1,8 +1,8 @@
 import React from 'react';
-import {useContext} from "react";
+
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import {UserCtx, UserProvider} from "./context/UserState";
+import {UserProvider} from "./context/UserState";
 import useToken from './hooks/useToken';
 
 import Home from "./pages/Home";
@@ -40,8 +40,6 @@ function App() {
             },
         },
     });
-
-    const UserContext = useContext(UserCtx);
 
     return (
         <UserProvider>

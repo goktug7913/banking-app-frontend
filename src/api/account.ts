@@ -1,8 +1,7 @@
-import axios from "axios";
-import {backendUrl} from "../backendConfig";
+import axiosInstance from "./AxiosInstance";
 
 export const getMasterAccount = async (token: string) => {
-    const response = await axios.get(backendUrl + '/account/master', {
+    const response = await axiosInstance.get('/account/master', {
         headers: {
             'authorization': `${token}`
         }

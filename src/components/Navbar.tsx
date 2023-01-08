@@ -12,16 +12,6 @@ import {UserCtx} from "../context/UserState";
 // Logout button is only visible when logged in
 
 export default function Navbar() {
-    const [user, setUser] = React.useState({
-        account_id: '',
-        name: '',
-        surname: '',
-        email: '',
-        fiat_accounts: [],
-        crypto_accounts: [],
-        transactions: [],
-    });
-
     const UserContext = useContext(UserCtx);
 
     const logout = () => {
@@ -39,6 +29,7 @@ export default function Navbar() {
                     {UserContext.user.account_id ? <Button color="primary" href="/dashboard">Dashboard</Button> : null}
                     {UserContext.user.account_id ? null : <Button color="primary" href="/login">Login</Button>}
                     {UserContext.user.account_id ? <Button color="primary" href="/logout" onClick={logout}>Logout</Button> : <Button color="primary" href="/register">Register</Button>}
+                    {UserContext.user.account_id ? <Typography variant="body1">{UserContext.user.name + " " + UserContext.user.surname}</Typography> : null}
                 </Toolbar>
             </Container>
         </AppBar>

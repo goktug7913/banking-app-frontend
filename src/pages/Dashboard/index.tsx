@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 //import "./Dashboard.css";
+
 //@ts-ignore
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import {
@@ -15,18 +16,31 @@ import {
     ListItemIcon,
 } from "@mui/material";
 import {UserCtx} from "../../context/UserState";
-
-
-
+import AxiosInstance from "../../api/AxiosInstance";
 
 export default function Dashboard() {
     const UserContext = useContext(UserCtx).user;
+    const SetUserContext = useContext(UserCtx).setUser;
 
     function CreateNewAccount() {
         // Redirect to creation page
         window.history.pushState({}, "", "/createAccount");
         window.location.reload();
     }
+
+    // Let's update the user context on page load
+    // This is to make sure that the user context is up to date
+    useEffect(() => {
+        AxiosInstance.get("/account/", {
+            data: UserContext.account_id
+        })
+            .then((res) => {
+                SetUserContext(res.data);
+            }).catch((err) => {
+            console.log(err);
+        });
+    },[]);
+
 
     return(
         <Container sx={{}}>
@@ -73,7 +87,7 @@ export default function Dashboard() {
                                 return(
                                 <ListItem key={index} alignItems="center">
                                     <ListItemIcon children={<AccountBalanceWalletIcon/>}/>
-                                    <ListItemText primary={"ID: " + account}  />
+                                    <ListItemText primary={"ID: " + account}/>
                                 </ListItem>
                                 )
                             })}

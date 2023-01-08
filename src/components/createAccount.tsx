@@ -1,10 +1,11 @@
 import React from "react";
 import Select from "react-select";
-import {backendUrl} from "../backendConfig";
-import axios from "axios";
 import "./createAccount.css";
 import {getIdFromToken} from "../api/getIdFromToken";
 import {Box, Button, Container, TextField} from "@mui/material";
+import axiosInstance from "../api/AxiosInstance";
+import {UserCtx} from "../context/UserState";
+import {useContext} from "react";
 
 const account_types = [
     { value: "fiat", label: "Fiat" },
@@ -45,6 +46,8 @@ export default function CreateAccount(token: any) {
     const [currencyList, setCurrencyList] = React.useState(fiat_currencies);
     const [name, setName] = React.useState("");
 
+    const UserContext = useContext(UserCtx);
+
     const updateType = (e: any) => {
         setType(e);
         if (e.value === "fiat") {
@@ -61,18 +64,26 @@ export default function CreateAccount(token: any) {
     const onSubmit = (e: any) => {
         e.preventDefault();
 
-        getIdFromToken(token.token).then((id: any) => {
+        // First, let's get the user id from the token
+        getIdFromToken(UserContext.user.token).then((id: any) => {
             const request = {
                 master_id: id._id,
                 name: name,
                 currency: currency.value,
             }
-
-            axios.post(backendUrl+"/account/crypto", request)
-                .then(res => {
-                    console.log("CreateAccount.tsx: onSubmit: res: ", res);
+            console.log(request);
+            if (type.value === "fiat") {
+                axiosInstance.post("/account/fiat", request).then((res) => {
                     window.history.pushState({}, "", "/dashboard");
-                })
+                    window.location.reload();
+                });
+            }
+            else {
+                axiosInstance.post("/account/crypto", request).then((res) => {
+                    window.history.pushState({}, "", "/dashboard");
+                    window.location.reload();
+                });
+            }
         })
     }
 
