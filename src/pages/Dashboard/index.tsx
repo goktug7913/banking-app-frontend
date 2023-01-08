@@ -20,18 +20,7 @@ import {UserCtx} from "../../context/UserState";
 
 
 export default function Dashboard() {
-    // Let's define the state for the dashboard
-    const [dashboard, setDashboard] = React.useState({
-        "name": "",
-        "surname": "",
-        "email": "",
-        "fiat_accounts": [],
-        "crypto_accounts": [],
-        "transactions": []
-    });
-
     const UserContext = useContext(UserCtx).user;
-
 
     function CreateNewAccount() {
         // Redirect to creation page

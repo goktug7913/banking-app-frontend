@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
-import axios from "axios";
-import {backendUrl} from "../../backendConfig";
+import AxiosInstance from "../../api/AxiosInstance";
 import {
     Alert,
     Box,
@@ -32,31 +31,19 @@ export default function Login() {
         // Let's clear the error message if there is one
         setError("");
 
-        loginUser(user).then(data => {
-            console.log("Login.tsx: handleSubmit: data: ", data);
-            // Set context
-            UserContext.setUser(data);
-            // Redirect to dashboard page
-            window.history.pushState({}, "", "/dashboard");
-            const navEvent = new PopStateEvent('popstate');
-            window.dispatchEvent(navEvent);
-        }).catch(err => {
-            console.log("Login.tsx: handleSubmit: err: ", err);
-            setError(err);
+        // Let's send the request to the server
+        AxiosInstance.post("/login", user)
+            .then((res) => {
+                // Let's set the user context
+                UserContext.setUser(res.data);
+                // Let's redirect to the dashboard
+                window.history.pushState({}, "", "/dashboard");
+                window.location.reload();
+            }
+        ).catch((err) => {
+            // Let's set the error message
+            setError(err.response.data);
         });
-    }
-
-    function loginUser(credentials: any) {
-        console.log("Login.tsx: loginUser: request: ", credentials);
-        const url = backendUrl + "/login";
-        return axios.post(url, credentials)
-            .then(res => {
-                return res.data;
-            })
-            .catch(err => {
-                console.log(err);
-                setError(err.response.data);
-            });
     }
 
     return(

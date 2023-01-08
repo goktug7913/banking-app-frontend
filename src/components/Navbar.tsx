@@ -24,6 +24,11 @@ export default function Navbar() {
 
     const UserContext = useContext(UserCtx);
 
+    const logout = () => {
+        sessionStorage.removeItem('user');
+        // We will get redirected to the home page by a href
+    }
+
     return(
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -33,7 +38,7 @@ export default function Navbar() {
                     </Typography>
                     {UserContext.user.account_id ? <Button color="primary" href="/dashboard">Dashboard</Button> : null}
                     {UserContext.user.account_id ? null : <Button color="primary" href="/login">Login</Button>}
-                    {UserContext.user.account_id ? <Button color="primary" href="/logout">Logout</Button> : <Button color="primary" href="/register">Register</Button>}
+                    {UserContext.user.account_id ? <Button color="primary" href="/logout" onClick={logout}>Logout</Button> : <Button color="primary" href="/register">Register</Button>}
                 </Toolbar>
             </Container>
         </AppBar>

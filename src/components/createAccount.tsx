@@ -4,6 +4,7 @@ import {backendUrl} from "../backendConfig";
 import axios from "axios";
 import "./createAccount.css";
 import {getIdFromToken} from "../api/getIdFromToken";
+import {Box, Button, Container, TextField} from "@mui/material";
 
 const account_types = [
     { value: "fiat", label: "Fiat" },
@@ -76,9 +77,9 @@ export default function CreateAccount(token: any) {
     }
 
     return(
-        <div className="createAccount-wrapper">
+        <Container>
             <h1>Create Account</h1>
-            <form className="form" onSubmit={onSubmit}>
+            <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
                 <label>
                     <p>Type</p>
                     <Select onChange={updateType} options={account_types}></Select>
@@ -88,12 +89,12 @@ export default function CreateAccount(token: any) {
                     <Select onChange={updateCurrency} options={currencyList}></Select>
                 </label>
                 <label>
-                    <input onChange={e => setName(e.target.value)} id="account_name" type="text" placeholder="Account Name" />
+                    <TextField sx={{ mt: 3, mb: 2 }} fullWidth onChange={e => setName(e.target.value)} id="account_name" type="text" placeholder="Account Name" />
                 </label>
                 <div>
-                    <input type="submit" value="Submit" />
+                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>Submit</Button>
                 </div>
-            </form>
-        </div>
+            </Box>
+        </Container>
     );
 }

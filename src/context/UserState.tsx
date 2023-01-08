@@ -57,6 +57,7 @@ export const UserProvider: React.FC<Props> = ({children}) => {
 
         setUser(JSON.parse(sessionStorage.getItem('user') as string) as UserAccountInterface);
 
+        /* TODO: VALIDATION LOGIC
         axiosInstance.post("/api/validate")
             .then((result) => {
                     if (result.status === 200) {
@@ -69,6 +70,7 @@ export const UserProvider: React.FC<Props> = ({children}) => {
             sessionStorage.removeItem('user');
             setUser(null as unknown as UserAccountInterface);
         });
+        */
     }, []);
 
     // Update the session storage when the user changes
